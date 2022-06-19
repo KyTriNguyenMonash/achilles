@@ -2,7 +2,8 @@
 .idea
 
 # Ignore the data folder
-data
+popsim/data
+popsim/outputs
 
 # Main
 main.py
