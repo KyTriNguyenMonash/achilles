@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 if __name__ == "__main__":
     p_atts = ['PERSID', 'AGE', 'SEX', 'FULLTIMEWORK', 'PARTTIMEWORK', 'CASUALWORK', 'ANYWORK', 'HHID']
@@ -10,6 +11,14 @@ if __name__ == "__main__":
 
     p_test_seed = p_original_df[p_atts]
     h_test_seed = h_original_df[h_atts]
+
+    # Further processing
+    p_test_seed.loc[p_test_seed['CASUALWORK'] == 'Yes', 'ANYWORK'] = 'CASUALWORK'
+    p_test_seed.loc[p_test_seed['PARTTIMEWORK'] == 'Yes', 'ANYWORK'] = 'PARTTIMEWORK'
+    p_test_seed.loc[p_test_seed['FULLTIMEWORK'] == 'Yes', 'ANYWORK'] = 'FULLTIMEWORK'
+    p_test_seed = p_test_seed.drop(columns=['FULLTIMEWORK', 'PARTTIMEWORK', 'CASUALWORK'])
+
+    h_test_seed['CARS'] = np.where(h_test_seed['CARS'] == 0, 'No', 'Yes')
 
     print(p_test_seed)
     print(h_test_seed)
