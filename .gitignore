@@ -4,6 +4,9 @@
 # Ignore the data folder
 popsim/data
 popsim/outputs
+popsim/configs
+popsim-input
+popsim-output
 
 # Main
 main.py
