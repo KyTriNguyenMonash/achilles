@@ -14,13 +14,30 @@ REQUIRED_ATTS = [
 ]
 
 # func to check the all the names in the seed file match with the ones in the geo cross walk
+@click.command()
+@click.option("-l", "--local-dir", required=True, help="Local data directory")
+@click.option("-o", "--output-dir", required=True, help="Directory for generated data")
+def main(local_dir, output_dir):
+    log.info("Load data into memory ....")
+    original_df = pd.read_csv(os.path.join(local_dir, SOURCE_FILE_NAME))
 
-# generate the geo cross walk 
+    # generate the geo cross walk 
+    log.info("Filter out the only needed attributes")
+    df = original_df[REQUIRED_ATTS]
+    # check the matching of data
+    # save the file
+    log.info("Generate geo cross walk")
+    df.to_csv(os.path.join(output_dir, "geo_cross_walk.csv"), index=False)
 
-# save the file
+def check_matching(ser_source, ser_des):
+    ls_vals = ser_source.unique()
+    for val in ls_vals:
+        if val not in ser_des:
+            return False
+    return True
 
-# A main func to combine all and take the user cmd arguments
+def check_2_df_match(df_source, df_des, ls_pairs):
+    NotImplemented
 
 if __name__ == '__main__':
-    df = pd.read_csv('./data/source/' + SOURCE_FILE_NAME)
-    print(df[REQUIRED_ATTS])
+    main()
