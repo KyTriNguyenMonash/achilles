@@ -80,3 +80,6 @@ def process_persons(p_test_seed):
 def process_households(h_test_seed):
     h_test_seed["CARS"] = np.where(h_test_seed["CARS"] == 0, "No", "Yes")
     return h_test_seed
+
+if __name__ == '__main__':
+    main()
