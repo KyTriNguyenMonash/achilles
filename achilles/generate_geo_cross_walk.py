@@ -15,7 +15,8 @@ REQUIRED_ATTS = [
     "SA3_NAME_2016", # Match with the 'HomeSA3' in the household file
     "SA3_CODE_2016",
     "SA4_NAME_2016", # Match with "HomeSA4"
-    "SA4_CODE_2016"
+    "SA4_CODE_2016",
+    "STATE_CODE_2016"
 ]
 
 # func to check the all the names in the seed file match with the ones in the geo cross walk

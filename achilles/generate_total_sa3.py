@@ -49,4 +49,5 @@ if __name__ == '__main__':
         ]]
 
     df_final = df_hh_select.merge(df_pp_select.merge(df_work_select, how='inner', on='SA3_CODE_2016'), how='inner', on='SA3_CODE_2016')
+    df_final["STATE_CODE_2016"] = 2
     df_final.to_csv('SA3_controls.csv', index=False)
