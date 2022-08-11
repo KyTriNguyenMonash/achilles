@@ -30,6 +30,7 @@ def main(local_dir, output_dir):
     # generate the geo cross walk 
     log.info("Filter out the only needed attributes")
     df = original_df[REQUIRED_ATTS]
+    df = df.drop(df[df['SA1_MAINCODE_2016']==29999949999].index)
     # check the matching of data
     # save the file
     log.info("Generate geo cross walk")

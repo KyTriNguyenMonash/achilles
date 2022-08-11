@@ -54,20 +54,21 @@ def main(local_dir, output_dir):
     log.info("Check unique id for persons and households")
     validate_hts_data(p_test_seed, h_test_seed)
 
-    log.info("Process persons")
-    p_test_seed = process_persons(p_test_seed)
-    p_test_seed = replace_name_in_seed(p_test_seed, geo_df, MATCHING_NAME_CROSS).dropna()
-
     log.info("Process households")
     h_test_seed = process_households(h_test_seed)
     h_test_seed = replace_name_in_seed(h_test_seed, geo_df, MATCHING_NAME_CROSS).dropna()
-    h_test_seed.index = h_test_seed.index + 1
+    h_test_seed['hhnum'] = h_test_seed.index + 1
+
+    log.info("Process persons")
+    p_test_seed = process_persons(p_test_seed)
+    p_test_seed = replace_name_in_seed(p_test_seed, geo_df, MATCHING_NAME_CROSS).dropna()
+    p_test_seed = match_hhid_to_p(p_test_seed, h_test_seed)
 
     log.info("Generate persons seed")
     p_test_seed.to_csv(os.path.join(output_dir, f"p_test_seed.csv"), index=False)
 
     log.info("Generate households seed")
-    h_test_seed.to_csv(os.path.join(output_dir, f"h_test_seed.csv"), index_label='hhnum')
+    h_test_seed.to_csv(os.path.join(output_dir, f"h_test_seed.csv"), index=False)
 
 
 def is_unique_att(df, unique_att):
@@ -93,6 +94,13 @@ def process_persons(p_test_seed):
     # p_test_seed['HHID'] = p_test_seed['HHID'].str.slice(start=1).str.replace('H', '0')
     # p_test_seed['PERSID'] = p_test_seed['PERSID'].str.slice(start=1).str.replace('H', '0').str.replace('P', '1')
     return p_test_seed
+
+
+def match_hhid_to_p(df_p, df_h):
+    src_h, target_h = 'HHID', 'hhnum'
+    hold = df_h.set_index(src_h)[target_h].drop_duplicates()
+    df_p['hhnum'] = df_p[src_h].map(hold)
+    return df_p
 
 
 def process_households(h_test_seed):
