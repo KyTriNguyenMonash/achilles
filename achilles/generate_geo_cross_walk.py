@@ -30,6 +30,7 @@ def main(local_dir, output_dir):
     # generate the geo cross walk 
     log.info("Filter out the only needed attributes")
     df = original_df[REQUIRED_ATTS]
+    # NOTE: I think we have to remove code that does not exist in seed data
     df = df.drop(df[df['SA1_MAINCODE_2016']==29999949999].index)
     # check the matching of data
     # save the file
