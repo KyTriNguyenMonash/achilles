@@ -8,6 +8,7 @@ popsim/configs
 popsim-input
 popsim-output
 achilles/data/source
+**__pycache__
 
 # Main
 main.py
