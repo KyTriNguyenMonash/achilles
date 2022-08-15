@@ -2,12 +2,12 @@
 .idea
 
 # Ignore the data folder
-popsim/data
-popsim/outputs
-popsim/configs
+popsim/data/*
+popsim/output/*
+# popsim/configs
 popsim-input
 popsim-output
-achilles/data/source
+achilles/data_popsim/source
 **__pycache__
 
 # Main
