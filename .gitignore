@@ -7,6 +7,7 @@ popsim/outputs
 popsim/configs
 popsim-input
 popsim-output
+achilles/data/source
 
 # Main
 main.py
