@@ -1,2 +1,2 @@
 target,geography,seed_table,importance,control_field,expression
-num_hh,SA1_7DIGITCODE_2016,households,1000000000,Total_dwelings,(households.CW_ADHHWGT_SA3 > 0) & (households.CW_ADHHWGT_SA3 < np.inf)
+num_hh,SA1,households,1000000000,Total_dwelings,(households.CW_ADHHWGT_SA3 > 0) & (households.CW_ADHHWGT_SA3 < np.inf)

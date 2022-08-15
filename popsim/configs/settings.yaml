@@ -15,8 +15,8 @@ max_expansion_factor: 30
 
 # Geographic Settings
 # ------------------------------------------------------------------
-geographies: [STATE_CODE_2016, SA3_CODE_2016, SA2_MAINCODE_2016, SA1_7DIGITCODE_2016]
-seed_geography: SA3_CODE_2016
+geographies: [State, SA3, SA2, SA1]
+seed_geography: SA3
 
 
 # Tracing
@@ -40,31 +40,45 @@ input_table_list:
     index_col: hh_id
     rename_columns:
       hhnum: hh_id
-      HomeSA1: SA1_7DIGITCODE_2016
-      HomeSA2: SA2_MAINCODE_2016
-      HomeSA3: SA3_CODE_2016
-      HomeSA4: SA4_CODE_2016
+      HomeSA1: SA1
+      HomeSA2: SA2
+      HomeSA3: SA3
+      HomeSA4: SA4
   - tablename: persons
     # expression_filename: seed_persons_expressions.csv
     filename : p_test_seed.csv
     rename_columns:
       # SERIALNO: hh_id
       hhnum: hh_id
-      HomeSA1: SA1_7DIGITCODE_2016
-      HomeSA2: SA2_MAINCODE_2016
-      HomeSA3: SA3_CODE_2016
-      HomeSA4: SA4_CODE_2016
+      HomeSA1: SA1
+      HomeSA2: SA2
+      HomeSA3: SA3
+      HomeSA4: SA4
     # drop unused mixed type fields to avoid PyTables pipeline performance issues
     # (PyTables will pickle object types that it cannot map directly to c-types)
   - tablename: geo_cross_walk
     filename : geo_cross_walk.csv
-  - tablename: SA1_7DIGITCODE_2016_control_data
+    rename_columns:
+      STATE_CODE_2016: State
+      SA3_CODE_2016: SA3
+      SA2_MAINCODE_2016: SA2
+      SA1_7DIGITCODE_2016: SA1
+  - tablename: SA1_control_data
     filename : SA1_controls.csv
-  - tablename: SA2_MAINCODE_2016_control_data
+    rename_columns:
+      STATE_CODE_2016: State
+      SA1_7DIGITCODE_2016: SA1
+  - tablename: SA2_control_data
     filename : SA2_controls.csv
-  - tablename: SA3_CODE_2016_control_data
+    rename_columns:
+      STATE_CODE_2016: State
+      SA2_MAINCODE_2016: SA2
+  - tablename: SA3_control_data
     filename : SA3_controls.csv
-  - tablename: STATE_CODE_2016_control_data
+    rename_columns:
+      STATE_CODE_2016: State
+      SA3_CODE_2016: SA3
+  - tablename: State_data
     filename : STATE_all_control.csv
 
 
@@ -122,8 +136,8 @@ models:
     - meta_control_factoring
     - final_seed_balancing
     - integerize_final_seed_weights
-    - sub_balancing.geography=SA2_MAINCODE_2016
-    - sub_balancing.geography=SA1_7DIGITCODE_2016
+    - sub_balancing.geography=SA2
+    - sub_balancing.geography=SA1
     - expand_households
     - write_data_dictionary
     - summarize
