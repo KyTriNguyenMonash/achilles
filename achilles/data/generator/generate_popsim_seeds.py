@@ -44,6 +44,7 @@ def main(local_dir, output_dir):
     h_test_seed.to_csv(os.path.join(output_dir, f"h_test_seed.csv"), index=False)
 
 def mod(local_dir):
+    log.info("Begin generating seed data")
     h_test_seed, p_test_seed = running_final(local_dir)
     return h_test_seed, p_test_seed
 
