@@ -1,6 +1,19 @@
 import pandas as pd
+import logging as log
+import click
+import os
 
-if __name__ == "__main__":
+log.basicConfig(level=log.DEBUG, format="%(asctime)s %(message)s")
+
+@click.command()
+@click.option("-o", "--output-dir", required=True, help="Directory for generated data")
+def main(output_dir):
+    df = getting_sum_totals(output_dir)
+    log.info("Generating the csv file for STATE")
+    df.to_csv(os.path.join(output_dir, "STATE_all_control.csv"), index=False)
+
+def getting_sum_totals(output_dir):
+    log.info("Beginning generating the sums of controls for STATE using SA4 level data")
     only_to_sum = [
         'Num_MVs_per_dweling_0_MVs', 
         'Num_MVs_per_dweling_1_MVs', 
@@ -29,8 +42,14 @@ if __name__ == "__main__":
         'P_Hours_wkd_NS_Tot',
         'P_Tot_Unemp_Tot'
     ]
-    df_sa4 = pd.read_csv("./SA4_controls.csv")
+    log.info("Load resulted data of SA4 controls")
+    SA4_file = "SA4_controls.csv"
+    df_sa4 = pd.read_csv(os.path.join(output_dir, SA4_file))
+    log.info("Processing to get the final sum")
     s = df_sa4[only_to_sum].sum()
     s["STATE_CODE_2016"] = 2
-    a = pd.DataFrame(s).T
-    a.to_csv("STATE_all_control.csv", index=False)
+    fi = pd.DataFrame(s).T
+    return fi
+
+if __name__ == "__main__":
+    main()
