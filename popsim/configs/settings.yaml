@@ -121,6 +121,7 @@ output_synthetic_population:
     columns:
       - HHSIZE
       - CARS
+      - TOTALVEHS
   persons:
     filename: synthetic_persons.csv
     columns:
