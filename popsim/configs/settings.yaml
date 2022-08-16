@@ -78,8 +78,10 @@ input_table_list:
     rename_columns:
       STATE_CODE_2016: State
       SA3_CODE_2016: SA3
-  - tablename: State_data
+  - tablename: State_control_data
     filename : STATE_all_control.csv
+    rename_columns:
+      STATE_CODE_2016: State
 
 
 # Reserved Column Names
