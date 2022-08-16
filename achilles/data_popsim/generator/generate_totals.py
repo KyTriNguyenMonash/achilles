@@ -28,18 +28,20 @@ def running_get_final(local_dir, area_lev):
     file_name_tot_hh = f'2016Census_G30_VIC_{area_lev}.csv' #hh, vel
     file_name_tot_pp = f'2016Census_G01_VIC_{area_lev}.csv' #genders, pp, age gr
     file_name_tot_work = f'2016Census_G43B_VIC_{area_lev}.csv' #work
+    file_name_tot_hh2 = f'2016Census_G31_VIC_{area_lev}.csv' #hh size
 
     mid_folder = f'{area_lev}/VIC/'
 
     df_hh = pd.read_csv(local_dir + mid_folder + file_name_tot_hh)
+    df_hh2 = pd.read_csv(local_dir + mid_folder + file_name_tot_hh2)
     df_pp = pd.read_csv(local_dir + mid_folder + file_name_tot_pp)
     df_work = pd.read_csv(local_dir + mid_folder + file_name_tot_work)
 
     # Assuming that this position will always have the ID name
     id_name = df_hh.columns[0]
-    return filter_and_combine(df_hh, df_pp, df_work, id_name)
+    return filter_and_combine(df_hh, df_hh2, df_pp, df_work, id_name)
 
-def filter_and_combine(df_hh, df_pp, df_work, id_name):
+def filter_and_combine(df_hh, df_hh2, df_pp, df_work, id_name):
     log.info("Select only the wanted data")
     df_hh_select = df_hh[[
         id_name, 
@@ -50,6 +52,15 @@ def filter_and_combine(df_hh, df_pp, df_work, id_name):
         'Num_MVs_per_dweling_4mo_MVs', 
         'Num_MVs_NS', 
         'Total_dwelings'
+        ]]
+    df_hh_select2 = df_hh2[[
+        id_name, 
+        'Num_Psns_UR_1_Total',
+        'Num_Psns_UR_2_Total',
+        'Num_Psns_UR_3_Total',
+        'Num_Psns_UR_4_Total',
+        'Num_Psns_UR_5_Total',
+        'Num_Psns_UR_6mo_Total'
         ]]
     df_pp_select = df_pp[[
         id_name, 
@@ -77,7 +88,7 @@ def filter_and_combine(df_hh, df_pp, df_work, id_name):
         'P_Tot_Unemp_Tot'
         ]]
     log.info("Combine to produce the final dataset")
-    df_final = df_hh_select.merge(df_pp_select.merge(df_work_select, how='inner', on=id_name), how='inner', on=id_name)
+    df_final = df_hh_select2.merge(df_hh_select.merge(df_pp_select.merge(df_work_select, how='inner', on=id_name), how='inner', on=id_name), how='inner', on=id_name)
     df_final["STATE_CODE_2016"] = 2
     return df_final
 
