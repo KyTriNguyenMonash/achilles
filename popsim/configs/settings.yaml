@@ -122,14 +122,12 @@ output_synthetic_population:
       - HHSIZE
       - CARS
       - TOTALVEHS
-      - SA1
   persons:
     filename: synthetic_persons.csv
     columns:
       - AGE
       - SEX
       - ANYWORK
-      - SA1
 
 
 # Model steps for base mode
