@@ -15,6 +15,12 @@ def main(output_dir):
 def getting_sum_totals(output_dir):
     log.info("Beginning generating the sums of controls for STATE using SA4 level data")
     only_to_sum = [
+        'Num_Psns_UR_1_Total',
+        'Num_Psns_UR_2_Total',
+        'Num_Psns_UR_3_Total',
+        'Num_Psns_UR_4_Total',
+        'Num_Psns_UR_5_Total',
+        'Num_Psns_UR_6mo_Total',
         'Num_MVs_per_dweling_0_MVs', 
         'Num_MVs_per_dweling_1_MVs', 
         'Num_MVs_per_dweling_2_MVs', 
