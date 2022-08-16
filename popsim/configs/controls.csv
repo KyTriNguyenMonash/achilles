@@ -23,6 +23,11 @@ persons_age_85_plus,SA1,persons,500,Age_85ov_P,(persons.AGE >= 85) & (persons.AG
 persons_sex_male,SA2,persons,200,Tot_P_M,persons.SEX == "Male"
 persons_sex_female,SA2,persons,200,Tot_P_F,persons.SEX == "Female"
 
+persons_work_full,SA2,persons,1000,P_Emp_FullT_Tot,persons.ANYWORK == "FULLTIMEWORK"
+persons_work_pt,SA2,persons,1000,P_Emp_PartT_Tot,persons.ANYWORK == "PARTTIMEWORK"
+persons_work_casual,SA2,persons,1000,P_Emp_Guess_Casual_Tot,persons.ANYWORK == "CASUALWORK"
+persons_work_none,SA2,persons,1000,P_Tot_Unemp_Tot,persons.ANYWORK == "No"
+
 hh_mv_0,State,households,2000,Num_MVs_per_dweling_0_MVs,households.TOTALVEHS == 0
 hh_mv_1,State,households,2000,Num_MVs_per_dweling_1_MVs,households.TOTALVEHS == 1
 hh_mv_2,State,households,2000,Num_MVs_per_dweling_2_MVs,households.TOTALVEHS == 2

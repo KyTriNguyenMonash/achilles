@@ -46,7 +46,8 @@ def getting_sum_totals(output_dir):
         'P_Emp_PartT_Tot',
         'P_Emp_awy_f_wrk_Tot',
         'P_Hours_wkd_NS_Tot',
-        'P_Tot_Unemp_Tot'
+        'P_Tot_Unemp_Tot',
+        "P_Emp_Guess_Casual_Tot"
     ]
     log.info("Load resulted data of SA4 controls")
     SA4_file = "SA4_controls.csv"
