@@ -29,7 +29,7 @@ PERSONS_ATTRIBUTES = [
         "HHID",
         "HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"
     ]
-HOUSEHOLDS_ATTRIBUTES = ["HHID", "HHSIZE", "CARS", "CW_ADHHWGT_SA3","HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"]
+HOUSEHOLDS_ATTRIBUTES = ["HHID", "HHSIZE", "CARS", "TOTALVEHS", "CW_ADHHWGT_SA3","HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"]
    
 
 @click.command()
