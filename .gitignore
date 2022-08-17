@@ -9,6 +9,8 @@ popsim-input
 popsim-output
 achilles/data_popsim/source
 **__pycache__
+**.ipynb_checkpoints
+**mel_validation_results
 
 # Main
 main.py
