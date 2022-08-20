@@ -2,8 +2,8 @@
 .idea
 
 # Ignore the data folder
-popsim/data/*
-popsim/output/*
+popsim/*/data/*
+popsim/*/output/*
 # popsim/configs
 popsim-input
 popsim-output
