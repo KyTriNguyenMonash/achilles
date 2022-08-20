@@ -27,9 +27,19 @@ PERSONS_ATTRIBUTES = [
         "CASUALWORK",
         "ANYWORK",
         "HHID",
+        "ReportingPeriod",
+        "RP_ADPERSWGT_SA3", #Person weight for the given year, not used for anything for now
         "HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"
     ]
-HOUSEHOLDS_ATTRIBUTES = ["HHID", "HHSIZE", "CARS", "TOTALVEHS", "CW_ADHHWGT_SA3","HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"]
+HOUSEHOLDS_ATTRIBUTES = [
+    "HHID", 
+    "HHSIZE", 
+    "CARS", 
+    "TOTALVEHS", 
+    "ReportingPeriod", 
+    "RP_ADHHWGT_SA3",
+    "HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"
+    ]
    
 
 @click.command()
@@ -59,6 +69,8 @@ def running_final(local_dir):
     log.info("Process households")
     h_test_seed = process_households(h_test_seed)
     h_test_seed = replace_name_in_seed(h_test_seed, geo_df, MATCHING_NAME_CROSS).dropna()
+    # Create a new idea using numbering
+    h_test_seed = h_test_seed.reset_index(drop=True)
     h_test_seed['hhnum'] = h_test_seed.index + 1
 
     log.info("Process persons")
@@ -97,6 +109,9 @@ def is_unique_att(df, unique_att):
     return True if N == test_N else False
 
 def process_persons(p_test_seed):
+    # Filter to only get 2016 data
+    p_test_seed = p_test_seed[p_test_seed["ReportingPeriod"] == '2014-16']
+    # Process work
     p_test_seed.loc[p_test_seed["CASUALWORK"] == "Yes", "ANYWORK"] = "CASUALWORK"
     p_test_seed.loc[p_test_seed["PARTTIMEWORK"] == "Yes", "ANYWORK"] = "PARTTIMEWORK"
     p_test_seed.loc[p_test_seed["FULLTIMEWORK"] == "Yes", "ANYWORK"] = "FULLTIMEWORK"
@@ -116,6 +131,9 @@ def match_hhid_to_p(df_p, df_h):
 
 
 def process_households(h_test_seed):
+    # Filter to only get 2016 data
+    h_test_seed = h_test_seed[h_test_seed["ReportingPeriod"] == '2014-16']
+    # Replace CARS to boolean
     h_test_seed["CARS"] = np.where(h_test_seed["CARS"] == 0, "No", "Yes")
     # h_test_seed['HHID'] = h_test_seed['HHID'].str.slice(start=1).str.replace('H', '0')
     return h_test_seed
