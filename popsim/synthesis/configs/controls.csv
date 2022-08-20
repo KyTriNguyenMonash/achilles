@@ -1,5 +1,5 @@
 target,geography,seed_table,importance,control_field,expression
-num_hh,SA1,households,1000000000,Total_dwelings,(households.CW_ADHHWGT_SA3 > 0) & (households.CW_ADHHWGT_SA3 < np.inf)
+num_hh,SA1,households,1000000000,Total_dwelings,(households.RP_ADHHWGT_SA3 > 0) & (households.RP_ADHHWGT_SA3 < np.inf)
 
 hh_size_1,SA1,households,5000,Num_Psns_UR_1_Total,households.HHSIZE == 1
 hh_size_2,SA1,households,5000,Num_Psns_UR_2_Total,households.HHSIZE == 2

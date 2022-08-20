@@ -86,7 +86,7 @@ input_table_list:
 
 # Reserved Column Names
 # ------------------------------------------------------------------
-household_weight_col: CW_ADHHWGT_SA3
+household_weight_col: RP_ADHHWGT_SA3
 household_id_col: hh_id
 total_hh_control: num_hh
 
