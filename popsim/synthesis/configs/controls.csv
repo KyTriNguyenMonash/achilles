@@ -8,6 +8,8 @@ hh_size_4,SA1,households,5000,Num_Psns_UR_4_Total,households.HHSIZE == 4
 hh_size_5,SA1,households,5000,Num_Psns_UR_5_Total,households.HHSIZE == 5
 hh_size_6_plus,SA1,households,5000,Num_Psns_UR_6mo_Total,households.HHSIZE >= 6
 
+num_p,SA3,persons,1000,Tot_P_P,(persons.RP_ADPERSWGT_SA3 > 0) & (persons.RP_ADPERSWGT_SA3 < np.inf)
+
 persons_age_0_4,SA1,persons,500,Age_0_4_yr_P,(persons.AGE >= 0) & (persons.AGE <= 4)
 persons_age_5_14,SA1,persons,500,Age_5_14_yr_P,(persons.AGE >= 5) & (persons.AGE <= 14)
 persons_age_15_19,SA1,persons,500,Age_15_19_yr_P,(persons.AGE >= 15) & (persons.AGE <= 19)
