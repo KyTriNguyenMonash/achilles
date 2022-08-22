@@ -15,7 +15,7 @@ max_expansion_factor: 30
 
 # Geographic Settings
 # ------------------------------------------------------------------
-geographies: [State, SA3, SA2, SA1]
+geographies: [State, SA4, SA3, SA2, SA1]
 seed_geography: SA3
 
 
@@ -60,6 +60,7 @@ input_table_list:
     filename : geo_cross_walk.csv
     rename_columns:
       STATE_CODE_2016: State
+      SA4_CODE_2016: SA4
       SA3_CODE_2016: SA3
       SA2_MAINCODE_2016: SA2
       SA1_7DIGITCODE_2016: SA1
@@ -78,6 +79,11 @@ input_table_list:
     rename_columns:
       STATE_CODE_2016: State
       SA3_CODE_2016: SA3
+  - tablename: SA4_control_data
+    filename : SA4_controls.csv
+    rename_columns:
+      STATE_CODE_2016: State
+      SA4_CODE_2016: SA4
   - tablename: State_control_data
     filename : STATE_all_control.csv
     rename_columns:
