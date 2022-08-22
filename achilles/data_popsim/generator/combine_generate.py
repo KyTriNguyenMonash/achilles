@@ -30,10 +30,9 @@ def main(local_dir, output_dir):
         tot_file = generate_totals.mod(os.path.join(local_dir, path_file_tot), lev)
         tot_file.to_csv(os.path.join(output_dir ,f'{lev}_controls.csv'), index=False)
 
-    state_tot = extra_steps.getting_sum_totals(output_dir)
-    log.info("Generating the csv file for STATE")
-    state_tot.to_csv(os.path.join(output_dir, "STATE_all_control.csv"), index=False)
+    extra_steps.getting_sum_totals(output_dir, export_csv=True)
+    extra_steps.refactor_weights_both(output_dir, export_csv=True)
 
 if __name__ == "__main__":
-    #  python combine_generate.py -l ../source/ -o ../../../popsim/data/
+    #  python combine_generate.py -l ../source/ -o ../../../popsim/synthesis/data/
     main()

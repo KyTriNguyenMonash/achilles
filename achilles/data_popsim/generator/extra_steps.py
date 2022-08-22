@@ -8,12 +8,10 @@ log.basicConfig(level=log.DEBUG, format="%(asctime)s %(message)s")
 @click.command()
 @click.option("-o", "--output-dir", required=True, help="Directory for generated data")
 def main(output_dir):
-    df = getting_sum_totals(output_dir)
-    log.info("Generating the csv file for STATE")
-    df.to_csv(os.path.join(output_dir, "STATE_all_control.csv"), index=False)
+    getting_sum_totals(output_dir, export_csv=True)
     refactor_weights_both(output_dir, export_csv=True)
 
-def getting_sum_totals(output_dir):
+def getting_sum_totals(output_dir, export_csv=False, csv_file_name="STATE_all_control.csv"):
     log.info("Beginning generating the sums of controls for STATE using SA4 level data")
     only_to_sum = [
         'Num_Psns_UR_1_Total',
@@ -57,6 +55,9 @@ def getting_sum_totals(output_dir):
     s = df_sa4[only_to_sum].sum()
     s["STATE_CODE_2016"] = 2
     fi = pd.DataFrame(s).T
+    if export_csv:
+        log.info("Generating the csv file for STATE")
+        fi.to_csv(os.path.join(output_dir, csv_file_name), index=False)
     return fi
 
 def refactor_weights_both(output_dir, export_csv=False):
