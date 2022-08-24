@@ -5,6 +5,7 @@
 popsim/*/data/*
 popsim/*/output/*
 # popsim/configs
+dist
 popsim-input
 popsim-output
 achilles/data_popsim/source
