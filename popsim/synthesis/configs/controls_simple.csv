@@ -1,3 +1,2 @@
 target,geography,seed_table,importance,control_field,expression
-num_hh,SA1,households,1000000000,Total_dwelings,(households.RP_ADHHWGT_SA3 > 0) & (households.RP_ADHHWGT_SA3 < np.inf)
-num_p,SA3,persons,10000,Tot_P_P,(persons.RP_ADPERSWGT_SA3 > 0) & (persons.RP_ADPERSWGT_SA3 < np.inf)
+num_hh,SA3,households,1000000000,Total_dwelings,(households.CW_ADHHWGT_SA3 > 0) & (households.CW_ADHHWGT_SA3 < np.inf)

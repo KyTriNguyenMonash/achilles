@@ -31,7 +31,9 @@ def main(local_dir, output_dir):
         tot_file.to_csv(os.path.join(output_dir ,f'{lev}_controls.csv'), index=False)
 
     extra_steps.getting_sum_totals(output_dir, export_csv=True)
-    extra_steps.refactor_weights_both(output_dir, export_csv=True)
+    # extra_steps.refactor_weights_both(output_dir, export_csv=True)
+    extra_steps.adding_dummy_data(output_dir, export_csv=True)
+    extra_steps.process_geo_match_with_seed(output_dir, export_csv=True)
 
 if __name__ == "__main__":
     #  python combine_generate.py -l ../source/ -o ../../../popsim/synthesis/data/

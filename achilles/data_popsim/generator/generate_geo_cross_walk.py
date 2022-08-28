@@ -34,23 +34,12 @@ def mod(local_dir, output_dir):
     return running_final(local_dir, output_dir)
 
 def running_final(local_dir, output_dir):
-    log.info("THIS ONLY WORK AFTER WE GOT THE SEED DATA")
     log.info("Load data into memory ....")
     geo_df = pd.read_csv(os.path.join(local_dir, SOURCE_FILE_NAME))
 
     # generate the geo cross walk 
     log.info("Filter out the only needed attributes")
     final_df = geo_df[REQUIRED_ATTS]
-    # NOTE: we have to remove code that does not exist in seed data
-    log.info("Drop values that not exist in seed at SA3 level")
-    # final_df = final_df.drop(final_df[final_df['SA1_MAINCODE_2016']==29999949999].index)
-    HH_FILE = 'h_test_seed.csv'
-    df_h = pd.read_csv(os.path.join(output_dir, HH_FILE))
-    exist_vals = df_h['HomeSA3'].unique()
-    all_vals = final_df['SA3_CODE_2016'].unique()
-    for v in all_vals:
-        if v not in exist_vals:
-            final_df = final_df.drop(final_df[final_df['SA3_CODE_2016']==v].index)
     # TOBE: check the matching of data
     return final_df
 
