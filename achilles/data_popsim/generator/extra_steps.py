@@ -108,21 +108,21 @@ def reweighting(df_seed, name_weight, target_total):
     return df_seed
 
 def adding_dummy_data(output_dir, export_csv=False):
-    log.info("Temp step of adding more data to fit with the missing zones in the seed in SA3")
+    log.info("Temp step of adding more data to fit with the missing zones in the seed in SA1")
     log.info("Loading data into memories")
-    file_control_SA3 = 'SA3_controls.csv'
+    file_control_SA1 = 'SA1_controls.csv'
     file_hh = 'h_test_seed.csv'
     file_p = 'p_test_seed.csv'
     file_geo = 'geo_cross_walk.csv'
     df_hh = pd.read_csv(os.path.join(output_dir, file_hh))
     df_p = pd.read_csv(os.path.join(output_dir, file_p))
-    df_SA3 = pd.read_csv(os.path.join(output_dir, file_control_SA3))
+    df_SA1 = pd.read_csv(os.path.join(output_dir, file_control_SA1))
     df_geo = pd.read_csv(os.path.join(output_dir, file_geo))
     log.info("Set up default values")
-    map_SA3_SA4 = {}
-    for SA3_code, SA4_code in zip(df_geo['SA3_CODE_2016'], df_geo['SA4_CODE_2016']):
-        if SA3_code not in map_SA3_SA4:
-            map_SA3_SA4[SA3_code] = SA4_code
+    mapping_zones = {}
+    for SA1, SA2, SA3, SA4 in zip(df_geo['SA1_7DIGITCODE_2016'], df_geo['SA2_MAINCODE_2016'], df_geo['SA3_CODE_2016'], df_geo['SA4_CODE_2016']):
+        if SA1 not in mapping_zones:
+            mapping_zones[SA1] = [SA2, SA3, SA4]
     dict_hh = {
         'HHID': ["Nope"],
         'HHSIZE': [1],
@@ -131,8 +131,8 @@ def adding_dummy_data(output_dir, export_csv=False):
         'ReportingPeriod': ["NA"],
         'RP_ADHHWGT_SA3': [0.00000000001],
         'CW_ADHHWGT_SA3': [0.000000000001],
-        'HomeSA1': ['NA'],
-        'HomeSA2': ['NA'],
+        'HomeSA1': [],
+        'HomeSA2': [],
         'HomeSA3': [],
         'HomeSA4': [],
         'hhnum': []
@@ -146,28 +146,34 @@ def adding_dummy_data(output_dir, export_csv=False):
         'ReportingPeriod': ["NA"],
         'RP_ADPERSWGT_SA3': [0.000001],
         'CW_ADPERSWGT_SA3': [0.0000001],
-        'HomeSA1': ['NA'],
-        'HomeSA2': ['NA'],
+        'HomeSA1': [],
+        'HomeSA2': [],
         'HomeSA3': [],
         'HomeSA4': [],
         'hhnum': []
     }
     count = 0
     base_hh_num = max(df_hh['hhnum'])
-    white_ls = ['HomeSA3', 'HomeSA4', 'hhnum']
+    white_ls = ['HomeSA1', 'HomeSA2', 'HomeSA3', 'HomeSA4', 'hhnum']
     print(base_hh_num)
     log.info("Identify missing data")
-    for code_SA3, num_h in zip(df_SA3['SA3_CODE_2016'], df_SA3['Total_dwelings']):
-        if num_h > 0 and code_SA3 not in df_hh['HomeSA3']:
-            log.info(f"Missing data for SA3 code {code_SA3} with {num_h} households")
-            code_SA4 = map_SA3_SA4[code_SA3]
+    for code_SA1, num_h in zip(df_SA1['SA1_7DIGITCODE_2016'], df_SA1['Total_dwelings']):
+        if num_h > 0 and code_SA1 not in df_hh['HomeSA1']:
+            log.info(f"Missing data for SA1 code {code_SA1} with {num_h} households")
             count += 1
             base_hh_num += 1
-            dict_hh['HomeSA3'].append(code_SA3)
-            dict_hh['HomeSA4'].append(code_SA4)
+            SA2, SA3, SA4 = mapping_zones[code_SA1]
+
+            dict_hh['HomeSA1'].append(code_SA1)
+            dict_hh['HomeSA2'].append(SA2)
+            dict_hh['HomeSA3'].append(SA3)
+            dict_hh['HomeSA4'].append(SA4)
             dict_hh['hhnum'].append(base_hh_num)
-            dict_p['HomeSA3'].append(code_SA3)
-            dict_p['HomeSA4'].append(code_SA4)
+
+            dict_p['HomeSA1'].append(code_SA1)
+            dict_p['HomeSA2'].append(SA2)
+            dict_p['HomeSA3'].append(SA3)
+            dict_p['HomeSA4'].append(SA4)
             dict_p['hhnum'].append(base_hh_num)
     for k in dict_hh:
         if k not in white_ls: dict_hh[k] = dict_hh[k]*count
