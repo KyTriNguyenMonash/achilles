@@ -99,7 +99,7 @@ total_hh_control: num_hh
 
 # Control Specification File Name
 # ------------------------------------------------------------------
-control_file_name: controls_simple.csv
+control_file_name: controls.csv
 
 
 # Output Tables

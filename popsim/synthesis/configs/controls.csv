@@ -1,5 +1,5 @@
 target,geography,seed_table,importance,control_field,expression
-num_hh,SA1,households,1000000000,Total_dwelings,(households.RP_ADHHWGT_SA3 > 0) & (households.RP_ADHHWGT_SA3 < np.inf)
+num_hh,SA1,households,1000000000,Total_dwelings,(households.CW_ADHHWGT_SA3 > 0) & (households.CW_ADHHWGT_SA3 < np.inf)
 
 hh_size_1,SA1,households,5000,Num_Psns_UR_1_Total,households.HHSIZE == 1
 hh_size_2,SA1,households,5000,Num_Psns_UR_2_Total,households.HHSIZE == 2
@@ -8,7 +8,7 @@ hh_size_4,SA1,households,5000,Num_Psns_UR_4_Total,households.HHSIZE == 4
 hh_size_5,SA1,households,5000,Num_Psns_UR_5_Total,households.HHSIZE == 5
 hh_size_6_plus,SA1,households,5000,Num_Psns_UR_6mo_Total,households.HHSIZE >= 6
 
-# num_p,SA3,persons,1000,Tot_P_P,(persons.RP_ADPERSWGT_SA3 > 0) & (persons.RP_ADPERSWGT_SA3 < np.inf)
+num_p,SA1,persons,4000,Tot_P_P,(persons.CW_ADPERSWGT_SA3 > 0) & (persons.CW_ADPERSWGT_SA3 < np.inf)
 
 persons_age_0_4,SA1,persons,500,Age_0_4_yr_P,(persons.AGE >= 0) & (persons.AGE <= 4)
 persons_age_5_14,SA1,persons,500,Age_5_14_yr_P,(persons.AGE >= 5) & (persons.AGE <= 14)
