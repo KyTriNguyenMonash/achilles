@@ -15,6 +15,7 @@ populationsim = "^0.5.1"
 wheel = "^0.37.1"
 pipwin = "^0.5.2"
 Shapely = "^1.8.4"
+matplotlib = "^3.5.3"
 
 [tool.poetry.dev-dependencies]
 
