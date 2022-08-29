@@ -126,7 +126,7 @@ def adding_dummy_data(output_dir, export_csv=False):
     dict_hh = {
         'HHID': ["Nope"],
         'HHSIZE': [1],
-        'CARS': [1],
+        'CARS': ['Yes'],
         'TOTALVEHS': [1],
         'ReportingPeriod': ["NA"],
         'RP_ADHHWGT_SA3': [0.00000000001],
