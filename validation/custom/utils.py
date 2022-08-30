@@ -5,11 +5,13 @@ import numpy as np
 import logging as log
 import click
 
-
+log.getLogger('PIL').setLevel(log.WARNING)
+log.getLogger('matplotlib.font_manager').setLevel(log.WARNING)
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(message)s")
 @click.command()
 @click.option("-l", "--local-dir", required=True, help="Local directory that contains popsim")
 @click.option("-o", "--output-dir", required=True, help="Directory for generated images")
+
 def main(local_dir, output_dir):
     log.info("Starting the scatter plot for each zones")
     log.info("Loading the data into the memory...")
@@ -33,7 +35,7 @@ def main(local_dir, output_dir):
     }
 
     for zone_lev in ls_zones_lev:
-        log.info(f"Load the controls file into memory of zone {zone_lev}")
+        log.info(f"Load the controls file into memory of zone {zone_lev}\n")
         zone_tot = ls_zones_lev[zone_lev]
         tot_file = f'data/{zone_lev}_controls.csv'
         df_tot = to_df(tot_file)
@@ -51,18 +53,19 @@ def main(local_dir, output_dir):
                 x.append(dict_vals_syn[zone] if zone in dict_vals_syn else 0)
                 y.append(num)
             base_line = [min(x), min(y), max(x), max(y)]
-            log.info(f"Plotting the scatter plot for att {name} at zone{zone_lev}")
+            log.info(f"Plotting the scatter plot for att {name} at zone {zone_lev}")
             plt.plot(base_line, base_line, color='orange', label='Base line')
             plt.scatter(x, y, alpha=0.5)
             plt.xlabel('Synthetic')
             plt.ylabel('Actual')
             plt.title(f'Level: {zone_lev} - Att: {name}')
             plt.legend()
-            log.info(f"Start to save file for Level: {zone_lev} - Att: {name}")
+            log.info(f"Generate .png image for plot: Level: {zone_lev} - Att: {name}\n")
             plt.savefig(os.path.join(output_dir, f'scatter_compare_{zone_lev}_{name}.png'))
             plt.close()
 
 
 if __name__ == '__main__':
+    # python utils.py -l ../../popsim/synthesis/ -o ./output/
     main()
   
