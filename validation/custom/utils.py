@@ -24,7 +24,7 @@ if __name__ == '__main__':
         'SA2': 'SA2_MAINCODE_2016',
         'SA3': 'SA3_CODE_2016'
     }
-
+    
     for zone_lev in ls_zones_lev:
         zone_tot = ls_zones_lev[zone_lev]
         tot_file = f'data/{zone_lev}_controls.csv'
@@ -48,5 +48,7 @@ if __name__ == '__main__':
             plt.ylabel('Actual')
             plt.title(f'Level: {zone_lev} - Att: {name}')
             plt.legend()
-            plt.savefig(f'scatter_compare_{zone_lev}_{name}.png')
+            plt.savefig(f'output/scatter_compare_{zone_lev}_{name}.png')
+            plt.close()
+            print(f"Done saving files: Level: {zone_lev} - Att: {name}")
   
