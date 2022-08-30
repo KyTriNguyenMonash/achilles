@@ -29,12 +29,14 @@ if __name__ == '__main__':
         zone_tot = ls_zones_lev[zone_lev]
         tot_file = f'data/{zone_lev}_controls.csv'
         df_tot = to_df(tot_file)
-        for df, att, exp in zip(df_controls['seed_table'], df_controls['control_field'],  df_controls['expression']):
+        for name, df, att, exp in zip(df_controls['target'], df_controls['seed_table'], df_controls['control_field'],  df_controls['expression']):
             if att in skip_ls: continue
-            if att in spec_ls: continue
             df = eval(df)
-            filtered_df = df[eval(exp)]
-            dict_vals_syn = filtered_df[zone_lev].value_counts()
+            if att in spec_ls:
+                dict_vals_syn = df[zone_lev].value_counts()
+            else:
+                filtered_df = df[eval(exp)]
+                dict_vals_syn = filtered_df[zone_lev].value_counts()
             x, y = [], []
             for zone, num in zip(df_tot[zone_tot], df_tot[att]):
                 x.append(dict_vals_syn[zone] if zone in dict_vals_syn else 0)
@@ -44,7 +46,7 @@ if __name__ == '__main__':
             plt.scatter(x, y, alpha=0.5)
             plt.xlabel('Synthetic')
             plt.ylabel('Actual')
-            plt.title(f'Level: {zone_lev} - Att: {att}')
+            plt.title(f'Level: {zone_lev} - Att: {name}')
             plt.legend()
-            plt.show()
+            plt.savefig(f'scatter_compare_{zone_lev}_{name}.png')
   
