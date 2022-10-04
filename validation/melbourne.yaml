@@ -1,0 +1,68 @@
+# directory of target run of PopulationSim, containing data/output directories
+popsim_dir: ../popsim
+# folder to save outputs
+validation_dir: mel_validation_results
+scenario: Base
+region: Melbourne
+geographies: data/geo_cross_walk.csv
+group_geographies:
+    - State
+    - SA3
+    - SA2
+    - SA1
+seed_households: data/h_test_seed.csv
+seed_cols:
+    geog: SA3
+    geog_weight: CW_ADHHWGT_SA3
+    hh_id: hhnum
+expanded_hhid: output/final_expanded_household_ids.csv
+expanded_hhid_col: hh_id
+summaries:
+    - output/final_summary_SA1_SA3.csv
+    - output/final_summary_SA2.csv
+    - output/final_summary_SA1.csv
+aggregate_summaries:
+    - name: Total Households
+      geography: SA1
+      control: num_hh_control
+      result: num_hh_result
+    - name: 'Household Size: 1 person HH'
+      geography: SA1
+      control: hh_size_1_control
+      result: hh_size_1_result
+    - name: 'Household Size: 2 person HH'
+      geography: SA1
+      control: hh_size_2_control
+      result: hh_size_2_result
+    - name: 'Household Size: 3 person HH'
+      geography: SA1
+      control: hh_size_3_control
+      result: hh_size_3_result
+    - name: 'Household Size: 4 person HH'
+      geography: SA1
+      control: hh_size_4_control
+      result: hh_size_4_result
+    - name: 'Household Size: 5 person HH'
+      geography: SA1
+      control: hh_size_5_control
+      result: hh_size_5_result
+    - name: 'Household Size: 6 plus person HH'
+      geography: SA1
+      control: hh_size_6_plus_control
+      result: hh_size_6_plus_result
+    - name: 'Work Fulltime'
+      geography: SA2
+      control: persons_work_full_control
+      result: persons_work_full_result
+    - name: 'Work Parttime'
+      geography: SA2
+      control: persons_work_pt_control
+      result: persons_work_pt_result
+    - name: 'Work Casual'
+      geography: SA2
+      control: persons_work_casual_control
+      result: persons_work_casual_result
+    - name: 'No Work'
+      geography: SA2
+      control: persons_work_none_control
+      result: persons_work_none_result
