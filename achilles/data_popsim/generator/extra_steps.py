@@ -19,10 +19,11 @@ def process_geo_match_with_seed(output_dir, export_csv=True):
     final_df = pd.read_csv(os.path.join(output_dir, file_geo))
     HH_FILE = 'h_test_seed.csv'
     df_h = pd.read_csv(os.path.join(output_dir, HH_FILE))
-    exist_vals = df_h['HomeSA3'].unique()
+    exist_vals = df_h['SA3'].unique()
     all_vals = final_df['SA3_CODE_2016'].unique()
     for v in all_vals:
         if v not in exist_vals:
+            log.info(f"Drop SA3 value {v} from geo dataframe")
             final_df = final_df.drop(final_df[final_df['SA3_CODE_2016']==v].index)
     if export_csv:
         log.info("Output the new geo cross file, replacing old one")

@@ -6,14 +6,6 @@ import os
 
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(message)s")
 
-MATCHING_NAME_CROSS = [
-    # (name in seed, name in geo, code in geo and in ABS)
-    ("HomeSA1", "SA1_MAINCODE_2016", "SA1_7DIGITCODE_2016"),
-    ("HomeSA2", "SA2_NAME_2016", "SA2_MAINCODE_2016"),
-    ("HomeSA3", "SA3_NAME_2016", "SA3_CODE_2016"),
-    ("HomeSA4", "SA4_NAME_2016", "SA4_CODE_2016")
-]
-
 PATH_HTS_PERSONS_12_16_SA1_V1 = "VISTA_2012_16_v1_SA1_CSV/P_VISTA12_16_SA1_V1.csv"
 PATH_HTS_HOUSEHOLDS_12_16_SA1_V1 = "VISTA_2012_16_v1_SA1_CSV/H_VISTA12_16_SA1_V1.csv"
 GEO_FILE = "MB_2016_VIC.csv"
@@ -30,7 +22,7 @@ PERSONS_ATTRIBUTES = [
         "ReportingPeriod",
         "RP_ADPERSWGT_SA3", #Person weight for the given year, not used for anything for now
         "CW_ADPERSWGT_SA3",
-        "HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"
+        "HomeSA1"
     ]
 HOUSEHOLDS_ATTRIBUTES = [
     "HHID", 
@@ -40,7 +32,7 @@ HOUSEHOLDS_ATTRIBUTES = [
     "ReportingPeriod", 
     "RP_ADHHWGT_SA3",
     "CW_ADHHWGT_SA3",
-    "HomeSA1", "HomeSA2", "HomeSA3", "HomeSA4"
+    "HomeSA1"
     ]
    
 
@@ -65,23 +57,26 @@ def running_final(local_dir):
     geo_df = pd.read_csv(
         os.path.join(local_dir, GEO_FILE)
     )
-    h_test_seed = running_hh(local_dir)
-    p_test_seed = running_pp(local_dir)
+    mapping_file = 'CG_SA1_2011_SA1_2016.xls'
+    mapping_sheet_in_file = 'Table 3'
+    df_map_raw  = pd.read_excel(os.path.join(local_dir, mapping_file), sheet_name=mapping_sheet_in_file)
+
+    h_test_seed = init_hh(local_dir)
+    p_test_seed = init_pp(local_dir)
 
     log.info("Process households")
     h_test_seed = process_households(h_test_seed)
-    h_test_seed = replace_name_in_seed(h_test_seed, geo_df, MATCHING_NAME_CROSS)
-    # Create a new idea using numbering
-    h_test_seed = h_test_seed.reset_index(drop=True)
-    h_test_seed['hhnum'] = h_test_seed.index + 1
+    h_test_seed = mapping_SA1_2012_2016(h_test_seed, df_map_raw)
+    h_test_seed = mapping_SA1_to_rest(h_test_seed, geo_df)
 
     log.info("Process persons")
     p_test_seed = process_persons(p_test_seed)
-    p_test_seed = replace_name_in_seed(p_test_seed, geo_df, MATCHING_NAME_CROSS)
     p_test_seed = match_hhid_to_p(p_test_seed, h_test_seed)
+    p_test_seed = mapping_SA1_2012_2016(p_test_seed, df_map_raw)
+    p_test_seed = mapping_SA1_to_rest(p_test_seed, geo_df)
     return h_test_seed, p_test_seed
 
-def running_pp(local_dir):
+def init_pp(local_dir):
     log.info("Load data people into memory ....")
     p_original_df = pd.read_csv(
         os.path.join(local_dir, PATH_HTS_PERSONS_12_16_SA1_V1)
@@ -93,7 +88,7 @@ def running_pp(local_dir):
         raise Exception("THE ID OF PERSON IS NOT UNIQUE")
     return p_test_seed
 
-def running_hh(local_dir):
+def init_hh(local_dir):
     log.info("Load data household into memory ....")
     h_original_df = pd.read_csv(
         os.path.join(local_dir, PATH_HTS_HOUSEHOLDS_12_16_SA1_V1)
@@ -138,20 +133,66 @@ def process_households(h_test_seed):
     # Replace CARS to boolean
     h_test_seed["CARS"] = np.where(h_test_seed["CARS"] == 0, "No", "Yes")
     # h_test_seed['HHID'] = h_test_seed['HHID'].str.slice(start=1).str.replace('H', '0')
+    # Create a new id using numbering
+    h_test_seed = h_test_seed.reset_index(drop=True)
+    h_test_seed['hhnum'] = h_test_seed.index + 1
     return h_test_seed
 
 
-def replace_name_in_seed(df_seed, df_geo, match_ref):
-    # NOTE: some data got drop after the mapping, prob some from 2012 is not match with 2016 ABS, like 9k data
-    #process geo file
-    for match in match_ref:
-        src_seed, src_geo, target_geo = match
-        df_geo[src_geo] = df_geo[src_geo].astype('str').str.replace(' ', '', regex=False).str.upper()
-        df_seed[src_seed] = df_seed[src_seed].astype('str').str.replace(' ', '', regex=False).str.upper()
-        hold = df_geo.astype('category').set_index(src_geo)[target_geo].drop_duplicates()
-        hold_d = hold.to_dict()
-        df_seed[src_seed] = df_seed[src_seed].astype('category').replace(hold_d)
-    return df_seed
+def mapping_SA1_2012_2016(df_target, df_map_raw):
+    log.info("Mapping the old SA1 of 2011 to new SA1 2016")
+    df_mapping = df_map_raw.rename(columns=df_map_raw.loc[4])[6:-3]
+    dict_map = {}
+    for name_2011, name_2016 in zip(df_mapping['SA1_MAINCODE_2011'], df_mapping['SA1_MAINCODE_2016']):
+        dict_map[name_2011] = name_2016
+    log.info("Begin the mapping...")
+    df_target['HomeSA1'].replace(dict_map, inplace=True)
+    return df_target
+
+
+def mapping_SA1_to_rest(df_target, geo_df):
+    log.info("Using the SA1 from geo file to map to the rest")
+    zip_from_geo = zip(
+        geo_df['SA1_MAINCODE_2016'],
+        geo_df['SA1_7DIGITCODE_2016'],
+        geo_df['SA2_MAINCODE_2016'],
+        geo_df['SA3_CODE_2016'],
+        geo_df['SA4_CODE_2016']
+    )
+
+    log.info("Preparing the mapping dict from geo file")
+    dict_map = {}
+    for sa1_full, sa1_7digit, sa2, sa3, sa4 in zip_from_geo:
+        dict_map[sa1_full] = {
+            'SA1': sa1_7digit,
+            'SA2': sa2,
+            'SA3': sa3,
+            'SA4': sa4
+        }
+
+    log.info("Loop through the SA1 in the target dataframe")
+    SA1_arr, SA2_arr, SA3_arr, SA4_arr = [], [], [], []
+    for sa1_full in df_target['HomeSA1']:
+        if sa1_full in dict_map:
+            val = dict_map[sa1_full]
+            SA1_arr.append(val['SA1'])
+            SA2_arr.append(val['SA2'])
+            SA3_arr.append(val['SA3'])
+            SA4_arr.append(val['SA4'])
+        else:
+            log.warning(f"ERR: this SA1: {sa1_full} does not exist in geo file")
+            SA1_arr.append(None)
+            SA2_arr.append(None)
+            SA3_arr.append(None)
+            SA4_arr.append(None)
+
+    log.info("Adding new collumns")
+    df_target['SA1'] = SA1_arr
+    df_target['SA2'] = SA2_arr
+    df_target['SA3'] = SA3_arr
+    df_target['SA4'] = SA4_arr
+    return df_target
 
 if __name__ == '__main__':
-    main()
+    # A way now, is to replace all SA1 then map from SA1 up using geo_cross_walk instead of replacing directly with name (this make sure the mapping more consistent tho not objective)
+    a = running_final('../source/')

@@ -32,7 +32,7 @@ def main(local_dir, output_dir):
 
     extra_steps.getting_sum_totals(output_dir, export_csv=True)
     # extra_steps.refactor_weights_both(output_dir, export_csv=True)
-    extra_steps.adding_dummy_data(output_dir, export_csv=True)
+    # extra_steps.adding_dummy_data(output_dir, export_csv=True)
     extra_steps.process_geo_match_with_seed(output_dir, export_csv=True)
 
 if __name__ == "__main__":
