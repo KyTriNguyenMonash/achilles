@@ -192,5 +192,71 @@ def adding_dummy_data(output_dir, export_csv=False):
         new_df_p.to_csv(os.path.join(output_dir, file_p), index=False)
     return new_df_hh, new_df_p
 
+
+def remap_SA4(output_dir, export_csv=False):
+    new_map_SA4 = {
+        220: [203, 217],
+        221: [213, 201, 215],
+        222: [210, 202],
+        223: [209, 204, 216],
+        224: [212, 205]
+    }
+    aff_sa4 = []
+    for k in new_map_SA4: aff_sa4.extend(new_map_SA4[k])
+
+    file_control_SA4 = 'SA4_controls.csv'
+    file_hh = 'h_test_seed.csv'
+    file_p = 'p_test_seed.csv'
+    file_geo = 'geo_cross_walk.csv'
+
+    df_hh = pd.read_csv(os.path.join(output_dir, file_hh))
+    df_p = pd.read_csv(os.path.join(output_dir, file_p))
+    df_SA4 = pd.read_csv(os.path.join(output_dir, file_control_SA4))
+    df_geo = pd.read_csv(os.path.join(output_dir, file_geo))
+
+    mapping_dict = {}
+    for z in df_SA4['SA4_CODE_2016']:
+        if z not in aff_sa4:
+            mapping_dict[z] = z
+        else:
+            for k in new_map_SA4:
+                if z in new_map_SA4[k]:
+                    mapping_dict[z] = k
+    
+    df_hh = add_new_SA4_col(df_hh, "SA4", mapping_dict)
+    df_hh = df_hh.drop(["SA4"], axis=1)
+
+    df_p = add_new_SA4_col(df_p, "SA4", mapping_dict)
+    df_p = df_p.drop(["SA4"], axis=1)
+
+    df_geo = add_new_SA4_col(df_geo, "SA4_CODE_2016", mapping_dict)
+    df_geo = df_geo.drop(["SA4_CODE_2016"], axis=1)
+    df_geo = df_geo.drop(df_geo[df_geo['newSA4'] == 299].index)
+    df_geo = df_geo.drop(df_geo[df_geo['newSA4'] == 297].index)
+
+    df_SA4 = add_new_SA4_col(df_SA4, "SA4_CODE_2016", mapping_dict)
+    df_SA4 = df_SA4.drop(["SA4_CODE_2016"], axis=1)
+    df_SA4 = df_SA4.groupby(['newSA4']).sum()
+    df_SA4["SA4"] = df_SA4.index
+    
+    if export_csv:
+        # log.info("Generating the csv file for new households, default replacing")
+        df_hh.to_csv(os.path.join(output_dir, file_hh), index=False)
+        # log.info("Generating the csv file for new persons, default replacing")
+        df_p.to_csv(os.path.join(output_dir, file_p), index=False)
+        df_geo.to_csv(os.path.join(output_dir, file_geo), index=False)
+        df_SA4.to_csv(os.path.join(output_dir, file_control_SA4), index=False)
+    
+
+def add_new_SA4_col(df, name_old_col, map_di, name_new_col="newSA4"):
+    arr = []
+    for old_z in df[name_old_col]:
+        if old_z in map_di: arr.append(map_di[old_z])
+        else: log.warning(f"this {old_z} is not exist in mapping dict, probably type convert issue")
+    df[name_new_col] = arr
+    return df
+
+
+
 if __name__ == "__main__":
-    adding_dummy_data('../../../popsim/synthesis/data/', export_csv=True)
+    remap_SA4('../../../popsim/synthesis/data/', export_csv=True)
