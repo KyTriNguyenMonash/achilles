@@ -22,22 +22,22 @@ def get_gdf(missing_zones, plot=False):
     gdf = gdf.loc[gdf['SA4_CODE16'].astype('int') > 200]
     gdf = gdf.loc[gdf['SA4_CODE16'].astype('int') < 220]
 
+    gdf['centroid'] = gdf.centroid
+
+    gdf['coords'] = gdf['geometry'].representative_point()
+    gdf['coords'] = gdf['coords'].apply(lambda x: x.coords[:])
+    gdf['coords'] = [coords[0] for coords in gdf['coords']]
+
     gdf_missing = gdf.loc[gdf['SA4_CODE16'].astype('int').isin(missing_zones)]
     gdf_exist = gdf.loc[~gdf['SA4_CODE16'].astype('int').isin(missing_zones)]
 
-    # gdf['centroid'] = gdf.centroid
-
-    # gdf['coords'] = gdf['geometry'].representative_point()
-    # gdf['coords'] = gdf['coords'].apply(lambda x: x.coords[:])
-    # gdf['coords'] = [coords[0] for coords in gdf['coords']]
-
     if plot:
         ax = gdf_missing["geometry"].plot()
-        gdf_exist.plot(ax=ax, color="black")
+        gdf_exist.plot(ax=ax, color="orange")
         # gdf.plot("AREASQKM16", legend=True)
-        # for idx, row in gdf.iterrows():
-        #     plt.annotate(text=row['SA4_CODE16'], xy=row['coords'],
-        #                 horizontalalignment='center')
+        for idx, row in gdf.iterrows():
+            plt.annotate(text=row['SA4_CODE16'], xy=row['coords'],
+                        horizontalalignment='center')
         plt.show()
     return gdf_exist, gdf_missing
 
