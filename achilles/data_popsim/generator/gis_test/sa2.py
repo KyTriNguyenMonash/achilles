@@ -21,6 +21,10 @@ def get_gdf(missing_zones, plot=False):
 
     gdf['centroid'] = gdf.centroid
 
+    gdf['coords'] = gdf['geometry'].representative_point()
+    gdf['coords'] = gdf['coords'].apply(lambda x: x.coords[:])
+    gdf['coords'] = [coords[0] for coords in gdf['coords']]
+
     gdf_missing = gdf.loc[gdf['SA2_MAIN16'].astype('int').isin(missing_zones)]
     gdf_exist = gdf.loc[~gdf['SA2_MAIN16'].astype('int').isin(missing_zones)]
 
@@ -28,6 +32,9 @@ def get_gdf(missing_zones, plot=False):
         ax = gdf_missing["geometry"].plot()
         gdf_exist.plot(ax=ax, color="orange")
         # gdf.plot("AREASQKM16", legend=True)
+        for idx, row in gdf.iterrows():
+            plt.annotate(text=row['SA2_MAIN16'], xy=row['coords'],
+                        horizontalalignment='center')
         plt.show()
     return gdf_exist, gdf_missing
 
