@@ -40,6 +40,7 @@ def running_final(local_dir, output_dir):
     # generate the geo cross walk 
     log.info("Filter out the only needed attributes")
     final_df = geo_df[REQUIRED_ATTS]
+    final_df = final_df.drop_duplicates()
     # TOBE: check the matching of data
     return final_df
 
