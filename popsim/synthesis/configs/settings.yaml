@@ -15,7 +15,7 @@ max_expansion_factor: 30
 
 # Geographic Settings
 # ------------------------------------------------------------------
-geographies: [SA4, SA3]
+geographies: [State, SA4, SA3, SA2, SA1]
 seed_geography: SA4
 
 
@@ -61,6 +61,18 @@ input_table_list:
       SA2_MAINCODE_2016: SA2
       SA1_7DIGITCODE_2016: SA1
 
+  - tablename: SA1_control_data
+    filename : SA1_controls.csv
+    rename_columns:
+      STATE_CODE_2016: State
+      SA1_7DIGITCODE_2016: SA1
+    
+  - tablename: SA2_control_data
+    filename : SA2_controls.csv
+    rename_columns:
+      STATE_CODE_2016: State
+      SA2_MAINCODE_2016: SA2
+
   - tablename: SA3_control_data
     filename : SA3_controls.csv
     rename_columns:
@@ -69,6 +81,11 @@ input_table_list:
 
   - tablename: SA4_control_data
     filename : SA4_controls.csv
+    rename_columns:
+      STATE_CODE_2016: State
+  
+  - tablename: State_control_data
+    filename : STATE_all_control.csv
     rename_columns:
       STATE_CODE_2016: State
 
@@ -82,7 +99,7 @@ total_hh_control: num_hh
 
 # Control Specification File Name
 # ------------------------------------------------------------------
-control_file_name: controls_simple.csv
+control_file_name: controls.csv
 
 
 # Output Tables
@@ -93,7 +110,6 @@ control_file_name: controls_simple.csv
 output_tables:
   action: include
   tables:
-    - summary_SA3
     - expanded_household_ids
 
 
@@ -127,6 +143,8 @@ models:
     - final_seed_balancing
     - integerize_final_seed_weights
     - sub_balancing.geography=SA3
+    - sub_balancing.geography=SA2
+    - sub_balancing.geography=SA1
     - expand_households
     - write_data_dictionary
     - summarize
