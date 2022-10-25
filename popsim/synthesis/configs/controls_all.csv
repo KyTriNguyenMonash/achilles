@@ -1,0 +1,37 @@
+target,geography,seed_table,importance,control_field,expression
+num_hh,SA1,households,1000000,Total_dwelings,(households.CW_ADHHWGT_SA3 > 0) & (households.CW_ADHHWGT_SA3 < np.inf)
+
+hh_size_1,SA1,households,5000,Num_Psns_UR_1_Total,households.HHSIZE == 1
+hh_size_2,SA1,households,5000,Num_Psns_UR_2_Total,households.HHSIZE == 2
+hh_size_3,SA1,households,5000,Num_Psns_UR_3_Total,households.HHSIZE == 3
+hh_size_4,SA1,households,5000,Num_Psns_UR_4_Total,households.HHSIZE == 4
+hh_size_5,SA1,households,5000,Num_Psns_UR_5_Total,households.HHSIZE == 5
+hh_size_6_plus,SA1,households,5000,Num_Psns_UR_6mo_Total,households.HHSIZE >= 6
+
+num_p,SA1,persons,1000010,Tot_P_P,(persons.CW_ADPERSWGT_SA3 > 0) & (persons.CW_ADPERSWGT_SA3 < np.inf)
+
+persons_age_0_4,SA1,persons,500,Age_0_4_yr_P,(persons.AGE >= 0) & (persons.AGE <= 4)
+persons_age_5_14,SA1,persons,500,Age_5_14_yr_P,(persons.AGE >= 5) & (persons.AGE <= 14)
+persons_age_15_19,SA1,persons,500,Age_15_19_yr_P,(persons.AGE >= 15) & (persons.AGE <= 19)
+persons_age_20_24,SA1,persons,500,Age_20_24_yr_P,(persons.AGE >= 20) & (persons.AGE <= 24)
+persons_age_25_34,SA1,persons,500,Age_25_34_yr_P,(persons.AGE >= 25) & (persons.AGE <= 34)
+persons_age_35_44,SA1,persons,500,Age_35_44_yr_P,(persons.AGE >= 35) & (persons.AGE <= 44)
+persons_age_45_54,SA1,persons,500,Age_45_54_yr_P,(persons.AGE >= 45) & (persons.AGE <= 54)
+persons_age_55_64,SA1,persons,500,Age_55_64_yr_P,(persons.AGE >= 55) & (persons.AGE <= 64)
+persons_age_65_74,SA1,persons,500,Age_65_74_yr_P,(persons.AGE >= 65) & (persons.AGE <= 74)
+persons_age_75_84,SA1,persons,500,Age_75_84_yr_P,(persons.AGE >= 75) & (persons.AGE <= 84)
+persons_age_85_plus,SA1,persons,500,Age_85ov_P,(persons.AGE >= 85) & (persons.AGE < np.inf)
+
+persons_sex_male,SA2,persons,200,Tot_P_M,persons.SEX == "Male"
+persons_sex_female,SA2,persons,200,Tot_P_F,persons.SEX == "Female"
+
+persons_work_full,SA2,persons,10000,P_Emp_FullT_Tot,persons.ANYWORK == "FULLTIMEWORK"
+persons_work_pt,SA2,persons,10000,P_Emp_PartT_Tot,persons.ANYWORK == "PARTTIMEWORK"
+persons_work_casual,SA2,persons,10000,P_Emp_Guess_Casual_Tot,persons.ANYWORK == "CASUALWORK"
+persons_work_none,SA2,persons,10000,P_Tot_Unemp_Tot,persons.ANYWORK == "No"
+
+hh_mv_0,State,households,2000,Num_MVs_per_dweling_0_MVs,households.TOTALVEHS == 0
+hh_mv_1,State,households,2000,Num_MVs_per_dweling_1_MVs,households.TOTALVEHS == 1
+hh_mv_2,State,households,2000,Num_MVs_per_dweling_2_MVs,households.TOTALVEHS == 2
+hh_mv_3,State,households,2000,Num_MVs_per_dweling_3_MVs,households.TOTALVEHS == 3
+hh_mv_4_plus,State,households,2000,Num_MVs_per_dweling_4mo_MVs,households.TOTALVEHS >= 4
