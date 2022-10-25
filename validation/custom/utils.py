@@ -29,9 +29,9 @@ def main(local_dir, output_dir):
     skip_ls = ['TOTALVEHS'] #Because it does not exist in the synthetic data
 
     ls_zones_lev = {
-        'SA1': 'SA1_7DIGITCODE_2016',
-        'SA2': 'SA2_MAINCODE_2016',
-        'SA3': 'SA3_CODE_2016'
+        # 'SA1': 'SA1_7DIGITCODE_2016',
+        'SA2': 'SA2_MAINCODE_2016'
+        # 'SA3': 'SA3_CODE_2016'
     }
 
     for zone_lev in ls_zones_lev:
@@ -57,7 +57,7 @@ def main(local_dir, output_dir):
             plt.plot(base_line, base_line, color='orange', label='Base line')
             plt.scatter(x, y, alpha=0.5)
             plt.xlabel('Synthetic')
-            plt.ylabel('Actual')
+            plt.ylabel('Census')
             plt.title(f'Level: {zone_lev} - Att: {name}')
             plt.legend()
             log.info(f"Generate .png image for plot: Level: {zone_lev} - Att: {name}\n")
