@@ -91,6 +91,7 @@ def filter_and_combine(df_hh, df_hh2, df_pp, df_work, id_name):
     df_final = df_hh_select2.merge(df_hh_select.merge(df_pp_select.merge(df_work_select, how='inner', on=id_name), how='inner', on=id_name), how='inner', on=id_name)
     df_final["STATE_CODE_2016"] = 2
     df_final["P_Emp_Guess_Casual_Tot"] = df_final[["P_Emp_awy_f_wrk_Tot", "P_Hours_wkd_NS_Tot"]].sum(axis=1)
+    df_final["P_Emp_Fixed_Unemp_Tot"] = df_final["Tot_P_P"] - df_final["P_Emp_FullT_Tot"] - df_final["P_Emp_PartT_Tot"] - df_final["P_Emp_Guess_Casual_Tot"]
     return df_final
 
 if __name__ == '__main__':
