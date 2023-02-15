@@ -12,6 +12,9 @@ GEO_FILE = "MB_2016_VIC.csv"
 
 PERSONS_ATTRIBUTES = [
         "PERSID",
+        "AGEGROUP",
+        "CARLICENCE",
+        "PERSINC",
         "AGE",
         "SEX",
         "FULLTIMEWORK",
@@ -22,7 +25,8 @@ PERSONS_ATTRIBUTES = [
         "ReportingPeriod",
         "RP_ADPERSWGT_SA3", #Person weight for the given year, not used for anything for now
         "CW_ADPERSWGT_SA3",
-        "HomeSA1"
+        "HomeSA1",
+        'STUDYING'
     ]
 HOUSEHOLDS_ATTRIBUTES = [
     "HHID", 
